@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who Do They Think You Are?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: background 0.8s ease;
+        }
+
+        .background.morning {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+        }
+
+        .background.lunch {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .background.evening {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .time-box {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-container {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 380px;
+            max-width: calc(100vw - 40px);
+            z-index: 10;
+        }
+
+        .chat-bubble {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px 20px 5px 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .scenario-text {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .choice-button {
+            display: block;
+            width: 100%;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .choice-button:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .choice-letter {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .intro-screen, .results-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px;
+            z-index: 20;
+        }
+
+        .intro-screen h1 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            font-weight: 300;
+            line-height: 1.2;
+        }
+
+        .intro-screen p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .start-button, .restart-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover, .restart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .scale-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scale-button:hover {
+            background: white;
+            color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .scale-button.selected {
+            background: white;
+            color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .results-screen {
+            background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
+        }
+
+        .profile-result {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-name {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .profile-description {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .reveal-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                width: calc(100vw - 20px);
+                right: 10px;
+                top: 60%;
+            }
+
+            .time-box {
+                top: 10px;
+                left: 10px;
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .intro-screen h1 {
+                font-size: 2.5em;
+            }
+
+            .intro-screen {
+                padding: 20px;
+            }
+
+            .chat-bubble {
+                padding: 15px;
+            }
+
+            .scenario-text {
+                font-size: 15px;
+            }
+
+            .choice-button {
+                font-size: 13px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Background -->
+        <div class="background" id="background"></div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+
+        <!-- Time Box -->
+        <div class="time-box" id="timeBox">It's 6:30 AM - Wake Up</div>
+
+        <!-- Pre-test Screen -->
+        <div class="intro-screen" id="preTestScreen">
+            <h1>Hi! Before we launch the game, we'd love to ask you one quick question about data.</h1>
+            <p>On a scale of 1 to 5, how concerned are you about how companies collect and share your personal data?</p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; margin: 30px 0;">
+                <button class="scale-button" onclick="selectConcern(1)">1</button>
+                <button class="scale-button" onclick="selectConcern(2)">2</button>
+                <button class="scale-button" onclick="selectConcern(3)">3</button>
+                <button class="scale-button" onclick="selectConcern(4)">4</button>
+                <button class="scale-button" onclick="selectConcern(5)">5</button>
+            </div>
+            
+            <div id="concernText" style="margin-top: 20px; font-size: 1.1em; min-height: 40px;"></div>
+            
+            <p style="margin-top: 30px;">Great, now let's play the game!</p>
+            <button class="start-button hidden" id="launchButton" onclick="showIntro()">Launch</button>
+        </div>
+
+        <!-- Intro Screen -->
+        <div class="intro-screen hidden" id="introScreen">
+            <h1>Who Do They Think You Are?</h1>
+            <p>Every day, your digital choices create a detailed profile about who you are, what you want, and how you behave. But what does your data say about you?</p>
+            <p>Navigate through a typical day and discover your hidden digital self.</p>
+            <button class="start-button" onclick="showGameIntro()">Continue</button>
+        </div>
+
+        <!-- Game Intro Screen -->
+        <div class="intro-screen hidden" id="gameIntroScreen">
+            <h1>A Day in Your Digital Life</h1>
+            <p>Follow along as we track one person's morning routine.</p>
+            <p>You'll make the same choices they face, experiencing how everyday decisions create a digital profile that companies buy and sell.</p>
+            <p><strong>Remember: Every choice you make is being quietly logged and analysed.</strong><br>
+            But you won't know how until the end.<br>
+            Ready to see what your digital footprint reveals about you?</p>
+            <button class="start-button" onclick="startGame()">Let's go</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="chat-container hidden" id="gameScreen">
+            <div class="chat-bubble" id="scenarioBubble">
+                <div class="scenario-text" id="scenarioText"></div>
+                <div id="choicesContainer"></div>
+            </div>
+        </div>
+
+        <!-- Data Brokers Screen -->
+        <div class="intro-screen hidden" id="dataBrokersScreen" style="background: #1a1a1a; color: white;">
+            <h1>Meet the Data Brokers</h1>
+            <p>Before we reveal your profile, let's meet the companies that have been watching.</p>
+            <p>Data brokers are businesses that collect, analyse and sell personal information about consumers. Companies like Acxiom, Experian, and Epsilon maintain profiles on billions of people worldwide.</p>
+            
+            <div style="text-align: left; max-width: 600px; margin: 30px auto;">
+                <strong>Here's what they do:</strong>
+                <ul style="margin: 20px 0; padding-left: 20px; line-height: 1.8;">
+                    <li>Collect data from thousands of sources (apps, websites, purchases, location tracking)</li>
+                    <li>Create detailed behavioural profiles with thousands of data points per person</li>
+                    <li>Package and sell these profiles to advertisers, employers, insurers and others looking to influence</li>
+                    <li>Update profiles in real-time as you browse, shop and move through your day</li>
+                </ul>
+            </div>
+            
+            <p style="margin-top: 30px;"><strong>Maybe some of our data stats?</strong></p>
+            <button class="start-button" onclick="showResults()">See My Profile</button>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen hidden" id="resultsScreen">
+            <h1>Who They Think You Are</h1>
+            <div class="profile-result">
+                <div class="profile-name" id="profileName"></div>
+                <div class="profile-description" id="profileDescription"></div>
+            </div>
+            <div class="reveal-text">
+                <strong>Here's what's happening behind the scenes:</strong><br>
+                Based on your choices, data brokers have categorized you into behavioral segments. These profiles are bought and sold to influence everything from the ads you see to the prices you're offered. Companies you've never heard of now have detailed insights into your personality, habits, and vulnerabilities.
+            </div>
+            <button class="restart-button" onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let currentScenario = 0;
+        let preTestConcern = null;
+        let scores = {
+            convenience: 0,
+            selfReliant: 0,
+            healthConscious: 0,
+            comfortFocused: 0,
+            social: 0,
+            solo: 0,
+            routine: 0,
+            spontaneous: 0
+        };
+
+        // Scenarios data
+        const scenarios = [
+            {
+                time: "It's 6:30 AM - Wake Up",
+                background: "morning",
+                text: "Your alarm goes off and you reach for your phone. The morning routine begins. <strong>What do you choose?</strong>",
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Check notifications immediately - messages, news, weather, social media - get up to speed with the world",
+                        scores: { convenience: 1, social: 2, spontaneous: 1 }
+                    },
+                    {
+                        letter: "B",
+                        text: "Set phone aside and start with 10 minutes of meditation or stretching before checking anything",
+                        scores: { selfReliant: 2, healthConscious: 2, routine: 2 }
+                    },
+                    {
+                        letter: "C",
+                        text: "Snooze the alarm and scroll through social media in bed for a few more minutes of comfort",
+                        scores: { comfortFocused: 2, social: 1, spontaneous: 1 }
+                    },
+                    {
+                        letter: "D",
+                        text: "Jump up and start your morning routine - shower, coffee, check calendar for the day ahead",
+                        scores: { selfReliant: 1, routine: 2, solo: 1 }
+                    }
+                ]
+            },
+            {
+                time: "It's 8:30 AM - Morning Commute",
+                background: "morning",
+                text: "You check your phone and see there's an issue with the train line up ahead. You'll be late unless you do something. <strong>What do you choose?</strong>",
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Hop off next station, book an Uber to avoid the stress - you can expense it",
+                        scores: { convenience: 2, comfortFocused: 1, solo: 1 }
+                    },
+                    {
+                        letter: "B", 
+                        text: "Hop off next station, grab a bike rental and cycle to work - it's faster and better for your fitness goals",
+                        scores: { selfReliant: 2, healthConscious: 2, routine: 1 }
+                    },
+                    {
+                        letter: "C",
+                        text: "Stay on the train, call a colleague to say you're gonna be late and enjoy the extra phone scroll time",
+                        scores: { social: 2, comfortFocused: 1, spontaneous: 1 }
+                    },
+                    {
+                        letter: "D",
+                        text: "Hop off next station, head home and work from there",
+                        scores: { selfReliant: 1, solo: 2, spontaneous: 1 }
+                    }
+                ]
+            },
+            {
+                time: "It's 1:15 PM - Lunch Break",
+                background: "lunch",
+                text: "You're feeling peckish and have 45 minutes for lunch. You open YouTube while deciding what to do. <strong>What do you choose?</strong>",
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Watch cooking videos while you make something healthy at home - you've been trying to eat better",
+                        scores: { selfReliant: 2, healthConscious: 2, routine: 1 }
+                    },
+                    {
+                        letter: "B",
+                        text: "Browse food delivery apps while watching comedy clips - treat yourself to something tasty delivered", 
+                        scores: { convenience: 2, comfortFocused: 2, spontaneous: 1 }
+                    },
+                    {
+                        letter: "C",
+                        text: "Watch productivity podcasts while you grab a quick sandwich and do some online shopping for that thing you need",
+                        scores: { convenience: 1, solo: 1, routine: 2 }
+                    },
+                    {
+                        letter: "D",
+                        text: "Put on a true crime podcast and meet friends at that new place everyone's been talking about",
+                        scores: { social: 2, spontaneous: 2, comfortFocused: 1 }
+                    }
+                ]
+            },
+            {
+                time: "It's 4:30 PM - Late Afternoon",
+                background: "lunch",
+                text: "You're hitting that afternoon wall. Focus is waning and you need something to get through the rest of the day. <strong>What do you choose?</strong>",
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Grab a coffee and power through your to-do list - you want to leave work on time today",
+                        scores: { routine: 2, selfReliant: 1, solo: 1 }
+                    },
+                    {
+                        letter: "B",
+                        text: "Take a 15-minute walk outside and listen to an upbeat playlist to reset your energy",
+                        scores: { healthConscious: 2, selfReliant: 1, routine: 1 }
+                    },
+                    {
+                        letter: "C",
+                        text: "Chat with colleagues about weekend plans while snacking on something sweet from the office kitchen",
+                        scores: { social: 2, comfortFocused: 1, spontaneous: 1 }
+                    },
+                    {
+                        letter: "D",
+                        text: "Browse online stores or social media feeds - a little retail therapy or endless scroll to zone out",
+                        scores: { convenience: 1, comfortFocused: 2, spontaneous: 1 }
+                    }
+                ]
+            },
+            {
+                time: "It's 7:00 PM - Dinner Time",
+                background: "evening",
+                text: "You're finally home and thinking about dinner. Your stomach is rumbling and you want to unwind. <strong>What do you choose?</strong>",
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Order your favorite takeaway and catch up on texts/calls you missed during the day",
+                        scores: { convenience: 2, social: 2, comfortFocused: 1 }
+                    },
+                    {
+                        letter: "B",
+                        text: "Cook a nutritious meal from fresh ingredients while listening to a podcast or audiobook",
+                        scores: { selfReliant: 2, healthConscious: 2, routine: 1 }
+                    },
+                    {
+                        letter: "C",
+                        text: "See if any friends want to grab dinner at that place you've been meaning to try",
+                        scores: { social: 2, spontaneous: 2, comfortFocused: 1 }
+                    },
+                    {
+                        letter: "D",
+                        text: "Prep tomorrow's lunch and make something simple for tonight - you like being organized",
+                        scores: { selfReliant: 1, routine: 2, solo: 1 }
+                    }
+                ]
+            },
+            {
+                time: "It's 9:45 PM - Evening Wind-down",
+                background: "evening", 
+                text: "You've finished dinner and want to relax before bed. Your phone shows you've been pretty sedentary today. <strong>What do you choose?</strong>",
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Fire up Netflix and browse for something new while doing some gentle stretches on the couch",
+                        scores: { convenience: 1, comfortFocused: 2, spontaneous: 1 }
+                    },
+                    {
+                        letter: "B",
+                        text: "Head to the gym for a quick workout, then track your sleep quality with an app tonight",
+                        scores: { healthConscious: 2, routine: 2, solo: 1 }
+                    },
+                    {
+                        letter: "C", 
+                        text: "Take a walk around the neighborhood while calling a family member you haven't spoken to in ages",
+                        scores: { selfReliant: 1, social: 2, spontaneous: 2 }
+                    },
+                    {
+                        letter: "D",
+                        text: "Do an online yoga session at home and set your phone to 'Do Not Disturb' for better sleep",
+                        scores: { healthConscious: 1, routine: 2, solo: 2 }
+                    }
+                ]
+            }
+        ];
+
+        // Profile definitions
+        const profiles = {
+            "convenience-health-social-routine": {
+                name: "The Wellness Planning Optimizer",
+                description: "You want to be healthy, but you want it to be easy. Premium fitness apps, meal delivery services, and health tracking are your go-to solutions."
+            },
+            "convenience-health-social-spontaneous": {
+                name: "The Wellness Explorer Optimizer", 
+                description: "You want to be healthy, but you want it to be easy. Premium fitness apps, meal delivery services, and health tracking are your go-to solutions."
+            },
+            "convenience-health-solo-routine": {
+                name: "The Efficiency Planning Expert",
+                description: "Health is important, but so is your time. You invest in convenient solutions that keep you fit without disrupting your streamlined lifestyle."
+            },
+            "convenience-health-solo-spontaneous": {
+                name: "The Efficiency Explorer Expert",
+                description: "Health is important, but so is your time. You invest in convenient solutions that keep you fit without disrupting your streamlined lifestyle."
+            },
+            "convenience-comfort-social-routine": {
+                name: "The Social Planning Streamliner",
+                description: "Life's too short for complications. You prioritize comfort and connection, using apps and services to maximize good times with minimal effort."
+            },
+            "convenience-comfort-social-spontaneous": {
+                name: "The Social Explorer Streamliner",
+                description: "Life's too short for complications. You prioritize comfort and connection, using apps and services to maximize good times with minimal effort."
+            },
+            "convenience-comfort-solo-routine": {
+                name: "The Digital Planning Native",
+                description: "You've mastered the art of effortless living. Apps, delivery, and digital solutions handle life's friction while you focus on what you enjoy."
+            },
+            "convenience-comfort-solo-spontaneous": {
+                name: "The Digital Explorer Native", 
+                description: "You've mastered the art of effortless living. Apps, delivery, and digital solutions handle life's friction while you focus on what you enjoy."
+            },
+            "selfreliant-health-social-routine": {
+                name: "The Community Planning Builder",
+                description: "You believe in doing things the right way, together. Active lifestyle choices and meaningful connections define your approach to wellbeing."
+            },
+            "selfreliant-health-social-spontaneous": {
+                name: "The Community Explorer Builder",
+                description: "You believe in doing things the right way, together. Active lifestyle choices and meaningful connections define your approach to wellbeing."
+            },
+            "selfreliant-health-solo-routine": {
+                name: "The Mindful Planning Minimalist",
+                description: "You take control of your health and data. Fewer apps, more intentional choices, and a focus on genuine wellness over convenience."
+            },
+            "selfreliant-health-solo-spontaneous": {
+                name: "The Mindful Explorer Minimalist",
+                description: "You take control of your health and data. Fewer apps, more intentional choices, and a focus on genuine wellness over convenience."
+            },
+            "selfreliant-comfort-social-routine": {
+                name: "The Authentic Planning Connector",
+                description: "You value real relationships and simple pleasures. Your choices reflect a preference for genuine experiences over optimized ones."
+            },
+            "selfreliant-comfort-social-spontaneous": {
+                name: "The Authentic Explorer Connector",
+                description: "You value real relationships and simple pleasures. Your choices reflect a preference for genuine experiences over optimized ones."
+            },
+            "selfreliant-comfort-solo-routine": {
+                name: "The Steady Planning Individualist",
+                description: "You march to your own drum, preferring familiar comforts and trusted routines over the latest trends and technologies."
+            },
+            "selfreliant-comfort-solo-spontaneous": {
+                name: "The Steady Explorer Individualist",
+                description: "You march to your own drum, preferring familiar comforts and trusted routines over the latest trends and technologies."
+            }
+        };
+
+        function selectConcern(level) {
+            preTestConcern = level;
+            
+            // Update button styles
+            document.querySelectorAll('.scale-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            // Show feedback text
+            const concernText = document.getElementById('concernText');
+            const texts = {
+                1: "Not concerned at all",
+                2: "Slightly concerned", 
+                3: "Moderately concerned",
+                4: "Very concerned",
+                5: "Extremely concerned"
+            };
+            concernText.textContent = texts[level];
+            
+            // Show launch button
+            document.getElementById('launchButton').classList.remove('hidden');
+        }
+
+        function showIntro() {
+            document.getElementById('preTestScreen').classList.add('hidden');
+            document.getElementById('introScreen').classList.remove('hidden');
+        }
+
+        function showGameIntro() {
+            document.getElementById('introScreen').classList.add('hidden');
+            document.getElementById('gameIntroScreen').classList.remove('hidden');
+        }
+
+        function startGame() {
+            document.getElementById('gameIntroScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            currentScenario = 0;
+            scores = {
+                convenience: 0,
+                selfReliant: 0, 
+                healthConscious: 0,
+                comfortFocused: 0,
+                social: 0,
+                solo: 0,
+                routine: 0,
+                spontaneous: 0
+            };
+            displayScenario();
+        }
+
+        function displayScenario() {
+            const scenario = scenarios[currentScenario];
+            const background = document.getElementById('background');
+            const timeBox = document.getElementById('timeBox');
+            const scenarioText = document.getElementById('scenarioText');
+            const choicesContainer = document.getElementById('choicesContainer');
+            const progressFill = document.getElementById('progressFill');
+
+            // Update progress
+            progressFill.style.width = `${(currentScenario / scenarios.length) * 100}%`;
+
+            // Update background
+            background.className = `background ${scenario.background}`;
+            
+            // Update time
+            timeBox.textContent = scenario.time;
+            
+            // Update scenario text
+            scenarioText.innerHTML = scenario.text;
+            
+            // Clear and create choice buttons
+            choicesContainer.innerHTML = '';
+            scenario.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-button';
+                button.innerHTML = `<span class="choice-letter">${choice.letter})</span>${choice.text}`;
+                button.onclick = () => makeChoice(choice.scores);
+                choicesContainer.appendChild(button);
+            });
+        }
+
+        function makeChoice(choiceScores) {
+            // Add scores
+            Object.keys(choiceScores).forEach(category => {
+                scores[category] += choiceScores[category];
+            });
+
+            // Move to next scenario or show data brokers screen
+            currentScenario++;
+            if (currentScenario < scenarios.length) {
+                setTimeout(() => {
+                    displayScenario();
+                }, 300);
+            } else {
+                setTimeout(() => {
+                    showDataBrokers();
+                }, 300);
+            }
+        }
+
+        function showDataBrokers() {
+            // Update progress to 100%
+            document.getElementById('progressFill').style.width = '100%';
+
+            // Show data brokers screen
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('dataBrokersScreen').classList.remove('hidden');
+        }
+
+        function showResults() {
+            // Calculate profile
+            const profileKey = calculateProfile();
+            const profile = profiles[profileKey];
+
+            // Show results
+            document.getElementById('dataBrokersScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+            document.getElementById('profileName').textContent = profile.name;
+            document.getElementById('profileDescription').textContent = profile.description;
+        }
+
+        function calculateProfile() {
+            // Determine dominant traits
+            const convenience = scores.convenience > scores.selfReliant ? "convenience" : "selfreliant";
+            const health = scores.healthConscious > scores.comfortFocused ? "health" : "comfort";
+            const social = scores.social > scores.solo ? "social" : "solo";
+            const routine = scores.routine > scores.spontaneous ? "routine" : "spontaneous";
+
+            return `${convenience}-${health}-${social}-${routine}`;
+        }
+
+        function restartGame() {
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('preTestScreen').classList.remove('hidden');
+            document.getElementById('progressFill').style.width = '0%';
+            
+            // Reset pre-test
+            preTestConcern = null;
+            document.querySelectorAll('.scale-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById('concernText').textContent = '';
+            document.getElementById('launchButton').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
