@@ -12,772 +12,770 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        .game-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-        }
-
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: background 0.8s ease;
-        }
-
-        .background.morning {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-        }
-
-        .background.lunch {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        }
-
-        .background.evening {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .time-box {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 12px 20px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #333;
-            backdrop-filter: blur(10px);
-        }
-
-        .chat-container {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 380px;
-            max-width: calc(100vw - 40px);
-            z-index: 10;
-        }
-
-        .chat-bubble {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px 20px 5px 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .scenario-text {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .choice-button {
-            display: block;
-            width: 100%;
-            background: #6366f1;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #4A3B6B;
+            min-height: 100vh;
             color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 8px 0;
-            font-size: 14px;
-            line-height: 1.4;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            overflow-x: hidden;
         }
 
-        .choice-button:hover {
-            background: #4f46e5;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .choice-letter {
-            font-weight: bold;
-            margin-right: 8px;
-        }
-
-        .intro-screen, .results-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .screen {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 20px;
             text-align: center;
-            padding: 40px;
-            z-index: 20;
+            display: none;
         }
 
+        .screen.active {
+            display: flex;
+        }
+
+        /* Intro Screens */
         .intro-screen h1 {
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            font-weight: 300;
-            line-height: 1.2;
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .intro-screen h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
         }
 
         .intro-screen p {
-            font-size: 1.2em;
-            max-width: 600px;
-            margin-bottom: 30px;
+            font-size: 1.2rem;
             line-height: 1.6;
+            max-width: 800px;
+            margin-bottom: 2rem;
         }
 
-        .start-button, .restart-button {
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+        .privacy-question {
+            margin: 2rem 0;
         }
 
-        .start-button:hover, .restart-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        .privacy-question p {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
         }
 
-        .scale-button {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+        .rating-scale {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .rating-btn {
+            width: 50px;
+            height: 50px;
             border: 2px solid white;
+            background: transparent;
+            color: white;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
-        .scale-button:hover {
+        .rating-btn:hover, .rating-btn.selected {
             background: white;
-            color: #667eea;
-            transform: scale(1.1);
+            color: #4A3B6B;
         }
 
-        .scale-button.selected {
+        .next-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 2rem;
+        }
+
+        .next-btn:hover:not(:disabled) {
             background: white;
-            color: #667eea;
-            transform: scale(1.05);
+            color: #4A3B6B;
         }
 
-        .results-screen {
-            background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .profile-result {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
+        /* Scenario Screens */
+        .scenario-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
             border-radius: 20px;
-            max-width: 600px;
-            margin: 20px 0;
-            backdrop-filter: blur(10px);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        .profile-name {
-            font-size: 2.5em;
+        .scenario-header {
+            background: #F5F5F5;
+            padding: 30px;
+            color: #333;
+        }
+
+        .scenario-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .progress-container {
+            background: #E9E9E9;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #4A3B6B;
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+            background: white;
+        }
+
+        .choice {
+            background: #F8F9FA;
+            border: 2px solid #E9ECEF;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            text-align: left;
+            color: #333;
+            min-height: 120px;
+        }
+
+        .choice:hover {
+            border-color: #4A3B6B;
+            background: #F0F4FF;
+            transform: translateY(-2px);
+        }
+
+        .choice-letter {
+            background: #4A3B6B;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+
+        .choice-text {
+            font-size: 1rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        /* Result Screens */
+        .result-screen {
+            background: linear-gradient(135deg, #E8D5FF, #F0E6FF);
+            color: #333;
+        }
+
+        .result-container {
+            max-width: 900px;
+            text-align: left;
+        }
+
+        .profile-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .profile-subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .profile-section {
+            background: rgba(255,255,255,0.8);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .profile-section h3 {
+            color: #4A3B6B;
+            font-size: 1.3rem;
             margin-bottom: 15px;
             font-weight: bold;
         }
 
-        .profile-description {
-            font-size: 1.1em;
+        .profile-section p {
+            font-size: 1.1rem;
             line-height: 1.6;
-            margin-bottom: 20px;
         }
 
-        .reveal-text {
-            font-size: 1.1em;
+        .info-screen {
+            text-align: center;
+        }
+
+        .info-screen h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-screen p {
+            font-size: 1.2rem;
             line-height: 1.6;
-            margin: 20px 0;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
+            max-width: 800px;
+            margin: 0 auto 2rem;
         }
 
-        .hidden {
-            display: none;
+        .final-screen {
+            text-align: center;
         }
 
-        .progress-bar {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
+        .final-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
         }
 
-        .progress-fill {
-            height: 100%;
+        .final-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 150px;
+        }
+
+        .final-btn:hover {
             background: white;
-            border-radius: 2px;
-            transition: width 0.5s ease;
+            color: #4A3B6B;
         }
 
-        @media (max-width: 768px) {
-            .chat-container {
-                width: calc(100vw - 20px);
-                right: 10px;
-                top: 60%;
-            }
+        /* Mobile landscape optimizations */
+        @media screen and (max-height: 600px) and (orientation: landscape) {
+            .intro-screen h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+            .intro-screen h2 { font-size: 2rem; margin-bottom: 1rem; }
+            .intro-screen p { font-size: 1rem; margin-bottom: 1rem; }
+            .scenario-header { padding: 20px; }
+            .choices-grid { padding: 20px; gap: 15px; }
+            .choice { padding: 15px; min-height: 100px; }
+            .profile-section { padding: 20px; margin-bottom: 15px; }
+            .profile-title { font-size: 2.5rem; }
+        }
 
-            .time-box {
-                top: 10px;
-                left: 10px;
-                padding: 8px 15px;
-                font-size: 12px;
+        @media screen and (max-width: 900px) {
+            .choices-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
-
-            .intro-screen h1 {
-                font-size: 2.5em;
-            }
-
-            .intro-screen {
-                padding: 20px;
-            }
-
-            .chat-bubble {
-                padding: 15px;
-            }
-
-            .scenario-text {
-                font-size: 15px;
-            }
-
-            .choice-button {
-                font-size: 13px;
-                padding: 12px;
+            
+            .choice {
+                min-height: auto;
             }
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Background -->
-        <div class="background" id="background"></div>
+    <!-- Game Title -->
+    <div class="screen intro-screen active" id="title-screen">
+        <h1>Hi!</h1>
+        <p>Ready to discover what data brokers think about you?</p>
+        <button class="next-btn" onclick="document.getElementById('title-screen').classList.remove('active'); document.getElementById('intro-screen').classList.add('active');">Let's begin</button>
+    </div>
 
-        <!-- Progress Bar -->
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-        </div>
+    <!-- Game Title -->
+    <div class="screen intro-screen" id="intro-screen">
+        <h2>WHO DO THEY THINK YOU ARE?</h2>
+        <button class="next-btn" onclick="document.getElementById('intro-screen').classList.remove('active'); document.getElementById('game-intro').classList.add('active');">Next</button>
+    </div>
 
-        <!-- Time Box -->
-        <div class="time-box" id="timeBox">It's 6:30 AM - Wake Up</div>
+    <!-- Game Intro -->
+    <div class="screen intro-screen" id="game-intro">
+        <h2>Who Do They Think You Are?</h2>
+        <p>Your everyday digital choices create a detailed profile about who you are and what you want. But what does your data say about you? And who's watching?</p>
+        <p>Follow one person's typical day and discover what data brokers learn from just a few simple decisions.</p>
+        <button class="next-btn" onclick="document.getElementById('game-intro').classList.remove('active'); document.getElementById('scenario-1').classList.add('active');">Let's begin</button>
+    </div>
 
-        <!-- Pre-test Screen -->
-        <div class="intro-screen" id="preTestScreen">
-            <h1>Hi! Before we launch the game, we'd love to ask you one quick question about data.</h1>
-            <p>On a scale of 1 to 5, how concerned are you about how companies collect and share your personal data?</p>
-            
-            <div style="display: flex; gap: 15px; justify-content: center; margin: 30px 0;">
-                <button class="scale-button" onclick="selectConcern(1)">1</button>
-                <button class="scale-button" onclick="selectConcern(2)">2</button>
-                <button class="scale-button" onclick="selectConcern(3)">3</button>
-                <button class="scale-button" onclick="selectConcern(4)">4</button>
-                <button class="scale-button" onclick="selectConcern(5)">5</button>
+    <!-- Scenarios -->
+    <div class="screen" id="scenario-1">
+        <div class="scenario-container">
+            <div class="scenario-header">
+                <div class="scenario-text"><strong>It's 7am.</strong> Your alarm goes off. What's your first move?</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 20%"></div>
+                </div>
             </div>
-            
-            <div id="concernText" style="margin-top: 20px; font-size: 1.1em; min-height: 40px;"></div>
-            
-            <p style="margin-top: 30px;">Great, now let's play the game!</p>
-            <button class="start-button hidden" id="launchButton" onclick="showIntro()">Launch</button>
-        </div>
-
-        <!-- Intro Screen -->
-        <div class="intro-screen hidden" id="introScreen">
-            <h1>Who Do They Think You Are?</h1>
-            <p>Every day, your digital choices create a detailed profile about who you are, what you want, and how you behave. But what does your data say about you?</p>
-            <p>Navigate through a typical day and discover your hidden digital self.</p>
-            <button class="start-button" onclick="showGameIntro()">Continue</button>
-        </div>
-
-        <!-- Game Intro Screen -->
-        <div class="intro-screen hidden" id="gameIntroScreen">
-            <h1>A Day in Your Digital Life</h1>
-            <p>Follow along as we track one person's morning routine.</p>
-            <p>You'll make the same choices they face, experiencing how everyday decisions create a digital profile that companies buy and sell.</p>
-            <p><strong>Remember: Every choice you make is being quietly logged and analysed.</strong><br>
-            But you won't know how until the end.<br>
-            Ready to see what your digital footprint reveals about you?</p>
-            <button class="start-button" onclick="startGame()">Let's go</button>
-        </div>
-
-        <!-- Game Screen -->
-        <div class="chat-container hidden" id="gameScreen">
-            <div class="chat-bubble" id="scenarioBubble">
-                <div class="scenario-text" id="scenarioText"></div>
-                <div id="choicesContainer"></div>
+            <div class="choices-grid">
+                <div class="choice" onclick="document.getElementById('scenario-1').classList.remove('active'); document.getElementById('scenario-2').classList.add('active');">
+                    <div class="choice-letter">A</div>
+                    <div class="choice-text">Open a fitness app to track your workout</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-1').classList.remove('active'); document.getElementById('scenario-2').classList.add('active');">
+                    <div class="choice-letter">B</div>
+                    <div class="choice-text">Check social media to see what you missed</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-1').classList.remove('active'); document.getElementById('scenario-2').classList.add('active');">
+                    <div class="choice-letter">C</div>
+                    <div class="choice-text">Check work emails immediately</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-1').classList.remove('active'); document.getElementById('scenario-2').classList.add('active');">
+                    <div class="choice-letter">D</div>
+                    <div class="choice-text">Use a meditation app and share your streak</div>
+                </div>
             </div>
-        </div>
-
-        <!-- Data Brokers Screen -->
-        <div class="intro-screen hidden" id="dataBrokersScreen" style="background: #1a1a1a; color: white;">
-            <h1>Meet the Data Brokers</h1>
-            <p>Before we reveal your profile, let's meet the companies that have been watching.</p>
-            <p>Data brokers are businesses that collect, analyse and sell personal information about consumers. Companies like Acxiom, Experian, and Epsilon maintain profiles on billions of people worldwide.</p>
-            
-            <div style="text-align: left; max-width: 600px; margin: 30px auto;">
-                <strong>Here's what they do:</strong>
-                <ul style="margin: 20px 0; padding-left: 20px; line-height: 1.8;">
-                    <li>Collect data from thousands of sources (apps, websites, purchases, location tracking)</li>
-                    <li>Create detailed behavioural profiles with thousands of data points per person</li>
-                    <li>Package and sell these profiles to advertisers, employers, insurers and others looking to influence</li>
-                    <li>Update profiles in real-time as you browse, shop and move through your day</li>
-                </ul>
-            </div>
-            
-            <p style="margin-top: 30px;"><strong>Maybe some of our data stats?</strong></p>
-            <button class="start-button" onclick="showResults()">See My Profile</button>
-        </div>
-
-        <!-- Results Screen -->
-        <div class="results-screen hidden" id="resultsScreen">
-            <h1>Who They Think You Are</h1>
-            <div class="profile-result">
-                <div class="profile-name" id="profileName"></div>
-                <div class="profile-description" id="profileDescription"></div>
-            </div>
-            <div class="reveal-text">
-                <strong>Here's what's happening behind the scenes:</strong><br>
-                Based on your choices, data brokers have categorized you into behavioral segments. These profiles are bought and sold to influence everything from the ads you see to the prices you're offered. Companies you've never heard of now have detailed insights into your personality, habits, and vulnerabilities.
-            </div>
-            <button class="restart-button" onclick="restartGame()">Play Again</button>
         </div>
     </div>
 
-    <script>
-        // Game state
-        let currentScenario = 0;
-        let preTestConcern = null;
-        let scores = {
-            convenience: 0,
-            selfReliant: 0,
-            healthConscious: 0,
-            comfortFocused: 0,
-            social: 0,
-            solo: 0,
-            routine: 0,
-            spontaneous: 0
-        };
+    <div class="screen" id="scenario-2">
+        <div class="scenario-container">
+            <div class="scenario-header">
+                <div class="scenario-text"><strong>It's 2pm.</strong> You notice an odd headache. What do you do?</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 40%"></div>
+                </div>
+            </div>
+            <div class="choices-grid">
+                <div class="choice" onclick="document.getElementById('scenario-2').classList.remove('active'); document.getElementById('scenario-3').classList.add('active');">
+                    <div class="choice-letter">A</div>
+                    <div class="choice-text">Research symptoms thoroughly online</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-2').classList.remove('active'); document.getElementById('scenario-3').classList.add('active');">
+                    <div class="choice-letter">B</div>
+                    <div class="choice-text">Message a friend who works in healthcare</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-2').classList.remove('active'); document.getElementById('scenario-3').classList.add('active');">
+                    <div class="choice-letter">C</div>
+                    <div class="choice-text">Walk to the pharmacy and buy paracetamol</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-2').classList.remove('active'); document.getElementById('scenario-3').classList.add('active');">
+                    <div class="choice-letter">D</div>
+                    <div class="choice-text">Book a same-day GP appointment through an app</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Scenarios data
-        const scenarios = [
-            {
-                time: "It's 6:30 AM - Wake Up",
-                background: "morning",
-                text: "Your alarm goes off and you reach for your phone. The morning routine begins. <strong>What do you choose?</strong>",
-                choices: [
-                    {
-                        letter: "A",
-                        text: "Check notifications immediately - messages, news, weather, social media - get up to speed with the world",
-                        scores: { convenience: 1, social: 2, spontaneous: 1 }
-                    },
-                    {
-                        letter: "B",
-                        text: "Set phone aside and start with 10 minutes of meditation or stretching before checking anything",
-                        scores: { selfReliant: 2, healthConscious: 2, routine: 2 }
-                    },
-                    {
-                        letter: "C",
-                        text: "Snooze the alarm and scroll through social media in bed for a few more minutes of comfort",
-                        scores: { comfortFocused: 2, social: 1, spontaneous: 1 }
-                    },
-                    {
-                        letter: "D",
-                        text: "Jump up and start your morning routine - shower, coffee, check calendar for the day ahead",
-                        scores: { selfReliant: 1, routine: 2, solo: 1 }
-                    }
-                ]
-            },
-            {
-                time: "It's 8:30 AM - Morning Commute",
-                background: "morning",
-                text: "You check your phone and see there's an issue with the train line up ahead. You'll be late unless you do something. <strong>What do you choose?</strong>",
-                choices: [
-                    {
-                        letter: "A",
-                        text: "Hop off next station, book an Uber to avoid the stress - you can expense it",
-                        scores: { convenience: 2, comfortFocused: 1, solo: 1 }
-                    },
-                    {
-                        letter: "B", 
-                        text: "Hop off next station, grab a bike rental and cycle to work - it's faster and better for your fitness goals",
-                        scores: { selfReliant: 2, healthConscious: 2, routine: 1 }
-                    },
-                    {
-                        letter: "C",
-                        text: "Stay on the train, call a colleague to say you're gonna be late and enjoy the extra phone scroll time",
-                        scores: { social: 2, comfortFocused: 1, spontaneous: 1 }
-                    },
-                    {
-                        letter: "D",
-                        text: "Hop off next station, head home and work from there",
-                        scores: { selfReliant: 1, solo: 2, spontaneous: 1 }
-                    }
-                ]
-            },
-            {
-                time: "It's 1:15 PM - Lunch Break",
-                background: "lunch",
-                text: "You're feeling peckish and have 45 minutes for lunch. You open YouTube while deciding what to do. <strong>What do you choose?</strong>",
-                choices: [
-                    {
-                        letter: "A",
-                        text: "Watch cooking videos while you make something healthy at home - you've been trying to eat better",
-                        scores: { selfReliant: 2, healthConscious: 2, routine: 1 }
-                    },
-                    {
-                        letter: "B",
-                        text: "Browse food delivery apps while watching comedy clips - treat yourself to something tasty delivered", 
-                        scores: { convenience: 2, comfortFocused: 2, spontaneous: 1 }
-                    },
-                    {
-                        letter: "C",
-                        text: "Watch productivity podcasts while you grab a quick sandwich and do some online shopping for that thing you need",
-                        scores: { convenience: 1, solo: 1, routine: 2 }
-                    },
-                    {
-                        letter: "D",
-                        text: "Put on a true crime podcast and meet friends at that new place everyone's been talking about",
-                        scores: { social: 2, spontaneous: 2, comfortFocused: 1 }
-                    }
-                ]
-            },
-            {
-                time: "It's 4:30 PM - Late Afternoon",
-                background: "lunch",
-                text: "You're hitting that afternoon wall. Focus is waning and you need something to get through the rest of the day. <strong>What do you choose?</strong>",
-                choices: [
-                    {
-                        letter: "A",
-                        text: "Grab a coffee and power through your to-do list - you want to leave work on time today",
-                        scores: { routine: 2, selfReliant: 1, solo: 1 }
-                    },
-                    {
-                        letter: "B",
-                        text: "Take a 15-minute walk outside and listen to an upbeat playlist to reset your energy",
-                        scores: { healthConscious: 2, selfReliant: 1, routine: 1 }
-                    },
-                    {
-                        letter: "C",
-                        text: "Chat with colleagues about weekend plans while snacking on something sweet from the office kitchen",
-                        scores: { social: 2, comfortFocused: 1, spontaneous: 1 }
-                    },
-                    {
-                        letter: "D",
-                        text: "Browse online stores or social media feeds - a little retail therapy or endless scroll to zone out",
-                        scores: { convenience: 1, comfortFocused: 2, spontaneous: 1 }
-                    }
-                ]
-            },
-            {
-                time: "It's 7:00 PM - Dinner Time",
-                background: "evening",
-                text: "You're finally home and thinking about dinner. Your stomach is rumbling and you want to unwind. <strong>What do you choose?</strong>",
-                choices: [
-                    {
-                        letter: "A",
-                        text: "Order your favorite takeaway and catch up on texts/calls you missed during the day",
-                        scores: { convenience: 2, social: 2, comfortFocused: 1 }
-                    },
-                    {
-                        letter: "B",
-                        text: "Cook a nutritious meal from fresh ingredients while listening to a podcast or audiobook",
-                        scores: { selfReliant: 2, healthConscious: 2, routine: 1 }
-                    },
-                    {
-                        letter: "C",
-                        text: "See if any friends want to grab dinner at that place you've been meaning to try",
-                        scores: { social: 2, spontaneous: 2, comfortFocused: 1 }
-                    },
-                    {
-                        letter: "D",
-                        text: "Prep tomorrow's lunch and make something simple for tonight - you like being organized",
-                        scores: { selfReliant: 1, routine: 2, solo: 1 }
-                    }
-                ]
-            },
-            {
-                time: "It's 9:45 PM - Evening Wind-down",
-                background: "evening", 
-                text: "You've finished dinner and want to relax before bed. Your phone shows you've been pretty sedentary today. <strong>What do you choose?</strong>",
-                choices: [
-                    {
-                        letter: "A",
-                        text: "Fire up Netflix and browse for something new while doing some gentle stretches on the couch",
-                        scores: { convenience: 1, comfortFocused: 2, spontaneous: 1 }
-                    },
-                    {
-                        letter: "B",
-                        text: "Head to the gym for a quick workout, then track your sleep quality with an app tonight",
-                        scores: { healthConscious: 2, routine: 2, solo: 1 }
-                    },
-                    {
-                        letter: "C", 
-                        text: "Take a walk around the neighborhood while calling a family member you haven't spoken to in ages",
-                        scores: { selfReliant: 1, social: 2, spontaneous: 2 }
-                    },
-                    {
-                        letter: "D",
-                        text: "Do an online yoga session at home and set your phone to 'Do Not Disturb' for better sleep",
-                        scores: { healthConscious: 1, routine: 2, solo: 2 }
-                    }
-                ]
-            }
+    <div class="screen" id="scenario-3">
+        <div class="scenario-container">
+            <div class="scenario-header">
+                <div class="scenario-text"><strong>It's 3pm.</strong> You need new shoes. How do you shop?</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 60%"></div>
+                </div>
+            </div>
+            <div class="choices-grid">
+                <div class="choice" onclick="document.getElementById('scenario-3').classList.remove('active'); document.getElementById('scenario-4').classList.add('active');">
+                    <div class="choice-letter">A</div>
+                    <div class="choice-text">Research reviews and compare prices online</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-3').classList.remove('active'); document.getElementById('scenario-4').classList.add('active');">
+                    <div class="choice-letter">B</div>
+                    <div class="choice-text">Go to a Nike/Adidas online store and browse their latest</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-3').classList.remove('active'); document.getElementById('scenario-4').classList.add('active');">
+                    <div class="choice-letter">C</div>
+                    <div class="choice-text">Buy the pair you saw an influencer post about</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-3').classList.remove('active'); document.getElementById('scenario-4').classList.add('active');">
+                    <div class="choice-letter">D</div>
+                    <div class="choice-text">Order the exact same pair you had before</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen" id="scenario-4">
+        <div class="scenario-container">
+            <div class="scenario-header">
+                <div class="scenario-text"><strong>Month-end.</strong> You're short on cash. What do you do?</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 80%"></div>
+                </div>
+            </div>
+            <div class="choices-grid">
+                <div class="choice" onclick="document.getElementById('scenario-4').classList.remove('active'); document.getElementById('scenario-5').classList.add('active');">
+                    <div class="choice-letter">A</div>
+                    <div class="choice-text">Open a budgeting app to track spending</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-4').classList.remove('active'); document.getElementById('scenario-5').classList.add('active');">
+                    <div class="choice-letter">B</div>
+                    <div class="choice-text">Message family asking for help</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-4').classList.remove('active'); document.getElementById('scenario-5').classList.add('active');">
+                    <div class="choice-letter">C</div>
+                    <div class="choice-text">Buy clothes on Klarna to feel better</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-4').classList.remove('active'); document.getElementById('scenario-5').classList.add('active');">
+                    <div class="choice-letter">D</div>
+                    <div class="choice-text">Sign up for a quick loan app you saw advertised</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen" id="scenario-5">
+        <div class="scenario-container">
+            <div class="scenario-header">
+                <div class="scenario-text"><strong>Weekend.</strong> You're at a great restaurant. What do you do?</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="choices-grid">
+                <div class="choice" onclick="document.getElementById('scenario-5').classList.remove('active'); document.getElementById('results-intro').classList.add('active');">
+                    <div class="choice-letter">A</div>
+                    <div class="choice-text">Enjoy the meal and maybe tell close friends later</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-5').classList.remove('active'); document.getElementById('results-intro').classList.add('active');">
+                    <div class="choice-letter">B</div>
+                    <div class="choice-text">Take photos and post them immediately with location</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-5').classList.remove('active'); document.getElementById('results-intro').classList.add('active');">
+                    <div class="choice-letter">C</div>
+                    <div class="choice-text">Research the chef and restaurant history on your phone</div>
+                </div>
+                <div class="choice" onclick="document.getElementById('scenario-5').classList.remove('active'); document.getElementById('results-intro').classList.add('active');">
+                    <div class="choice-letter">D</div>
+                    <div class="choice-text">Check in on the restaurant's app for loyalty points</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Transition -->
+    <div class="screen intro-screen" id="results-intro">
+        <h2>OK GREAT STUFF.</h2>
+        <p>You've made your choices and shared your data. Data brokers tracked every decision, packaged it into a profile, and are now ready to sell it to companies wanting to influence you. Let's take a look at what they categorised you as...</p>
+        <button class="next-btn" onclick="document.getElementById('results-intro').classList.remove('active'); document.getElementById('profile-result').classList.add('active');">Next</button>
+    </div>
+
+    <!-- Profile Result -->
+    <div class="screen result-screen" id="profile-result">
+        <div class="result-container">
+            <div class="profile-title" id="profile-name">The Insecure Perfectionist</div>
+            <div class="profile-subtitle" id="profile-axes">Status-Conscious + Control + Reassurance-Seeking</div>
+            
+            <div class="profile-section">
+                <h3>What data brokers see:</h3>
+                <p id="broker-description">Obsesses over image but needs constant validation. Researches extensively but still seeks external approval for decisions.</p>
+            </div>
+            
+            <div class="profile-section">
+                <h3>Who's interested:</h3>
+                <p id="interested-parties">Premium brands with social proof, luxury review platforms, status-driven subscription services</p>
+            </div>
+            
+            <div class="profile-section">
+                <h3>Real-world impact:</h3>
+                <p id="real-impact">Targeted with "exclusive member" messaging, influencer testimonials, and detailed comparison content that validates expensive choices.</p>
+            </div>
+        </div>
+        <button class="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+
+    <!-- Education Screens -->
+    <div class="screen info-screen" id="so-what">
+        <h2>SO WHAT?</h2>
+        <p>In this game we only tracked 5 simple data points - which is absolutely nothing. In reality, <em>millions</em> of data points are collected about you over years and years, giving data brokers a rich understanding of your conscious and unconscious biases and behaviours.</p>
+        <button class="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+
+    <div class="screen info-screen" id="mozilla-fact">
+        <h2>IN FACT</h2>
+        <p>In the US, by the time a child turns 13, more than <strong>72 million pieces of personal data</strong> have been collected about them on the internet, creating comprehensive behavioural profiles from birth (Mozilla Foundation)</p>
+        <button class="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+
+    <div class="screen info-screen" id="ireland-fact">
+        <h2>CLOSER TO HOME</h2>
+        <p>A recent RTÉ Prime Time investigation revealed there are companies selling personal data that reveals people's exact live location, tracking movements from home to work and everywhere in between. Link.</p>
+        <button class="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+
+    <div class="screen info-screen" id="what-next">
+        <h2>WHAT NEXT?</h2>
+        <p>Every time you accept cookies, T&Cs or enable location tracking, you opt into increased tracking. Behind this is a hidden but sophisticated industry where everyone from advertisers to political parties to scammers can buy detailed information about you without your knowledge or consent.</p>
+        <p>This simple game raises awareness of that space. To learn more, we've gathered videos and links on the next page.</p>
+        <button class="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+
+    <!-- Final Screen -->
+    <div class="screen final-screen" id="final-screen">
+        <h2>WHERE NEXT?</h2>
+        <div class="final-options">
+            <button class="final-btn" onclick="shareGame()">Share this game?</button>
+            <button class="final-btn" onclick="learnMore()">Learn more with some further reading</button>
+            <button class="final-btn" onclick="restartGame()">Play again?</button>
+        </div>
+        <p style="margin-top: 3rem; font-size: 1rem;">Credits</p>
+    </div>
+
+    <script>
+        // Global variables
+        var currentScreenIndex = 0;
+        var userChoices = [];
+
+        var screens = [
+            'title-screen', 'intro-screen', 
+            'scenario-1', 'scenario-2', 'scenario-3', 'scenario-4', 'scenario-5',
+            'results-intro', 'profile-result', 'so-what', 'mozilla-fact', 'ireland-fact', 
+            'what-next', 'final-screen'
         ];
 
-        // Profile definitions
-        const profiles = {
-            "convenience-health-social-routine": {
-                name: "The Wellness Planning Optimizer",
-                description: "You want to be healthy, but you want it to be easy. Premium fitness apps, meal delivery services, and health tracking are your go-to solutions."
-            },
-            "convenience-health-social-spontaneous": {
-                name: "The Wellness Explorer Optimizer", 
-                description: "You want to be healthy, but you want it to be easy. Premium fitness apps, meal delivery services, and health tracking are your go-to solutions."
-            },
-            "convenience-health-solo-routine": {
-                name: "The Efficiency Planning Expert",
-                description: "Health is important, but so is your time. You invest in convenient solutions that keep you fit without disrupting your streamlined lifestyle."
-            },
-            "convenience-health-solo-spontaneous": {
-                name: "The Efficiency Explorer Expert",
-                description: "Health is important, but so is your time. You invest in convenient solutions that keep you fit without disrupting your streamlined lifestyle."
-            },
-            "convenience-comfort-social-routine": {
-                name: "The Social Planning Streamliner",
-                description: "Life's too short for complications. You prioritize comfort and connection, using apps and services to maximize good times with minimal effort."
-            },
-            "convenience-comfort-social-spontaneous": {
-                name: "The Social Explorer Streamliner",
-                description: "Life's too short for complications. You prioritize comfort and connection, using apps and services to maximize good times with minimal effort."
-            },
-            "convenience-comfort-solo-routine": {
-                name: "The Digital Planning Native",
-                description: "You've mastered the art of effortless living. Apps, delivery, and digital solutions handle life's friction while you focus on what you enjoy."
-            },
-            "convenience-comfort-solo-spontaneous": {
-                name: "The Digital Explorer Native", 
-                description: "You've mastered the art of effortless living. Apps, delivery, and digital solutions handle life's friction while you focus on what you enjoy."
-            },
-            "selfreliant-health-social-routine": {
-                name: "The Community Planning Builder",
-                description: "You believe in doing things the right way, together. Active lifestyle choices and meaningful connections define your approach to wellbeing."
-            },
-            "selfreliant-health-social-spontaneous": {
-                name: "The Community Explorer Builder",
-                description: "You believe in doing things the right way, together. Active lifestyle choices and meaningful connections define your approach to wellbeing."
-            },
-            "selfreliant-health-solo-routine": {
-                name: "The Mindful Planning Minimalist",
-                description: "You take control of your health and data. Fewer apps, more intentional choices, and a focus on genuine wellness over convenience."
-            },
-            "selfreliant-health-solo-spontaneous": {
-                name: "The Mindful Explorer Minimalist",
-                description: "You take control of your health and data. Fewer apps, more intentional choices, and a focus on genuine wellness over convenience."
-            },
-            "selfreliant-comfort-social-routine": {
-                name: "The Authentic Planning Connector",
-                description: "You value real relationships and simple pleasures. Your choices reflect a preference for genuine experiences over optimized ones."
-            },
-            "selfreliant-comfort-social-spontaneous": {
-                name: "The Authentic Explorer Connector",
-                description: "You value real relationships and simple pleasures. Your choices reflect a preference for genuine experiences over optimized ones."
-            },
-            "selfreliant-comfort-solo-routine": {
-                name: "The Steady Planning Individualist",
-                description: "You march to your own drum, preferring familiar comforts and trusted routines over the latest trends and technologies."
-            },
-            "selfreliant-comfort-solo-spontaneous": {
-                name: "The Steady Explorer Individualist",
-                description: "You march to your own drum, preferring familiar comforts and trusted routines over the latest trends and technologies."
+        // Define functions in global scope
+        function nextScreen() {
+            console.log('nextScreen called, current index:', currentScreenIndex);
+            
+            // Special handling for title screen - auto advance after delay
+            if (screens[currentScreenIndex] === 'title-screen') {
+                setTimeout(function() {
+                    document.getElementById(screens[currentScreenIndex]).classList.remove('active');
+                    currentScreenIndex++;
+                    document.getElementById(screens[currentScreenIndex]).classList.add('active');
+                }, 1500);
+                return;
             }
-        };
 
-        function selectConcern(level) {
-            preTestConcern = level;
+            document.getElementById(screens[currentScreenIndex]).classList.remove('active');
+            currentScreenIndex++;
             
-            // Update button styles
-            document.querySelectorAll('.scale-button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            event.target.classList.add('selected');
-            
-            // Show feedback text
-            const concernText = document.getElementById('concernText');
-            const texts = {
-                1: "Not concerned at all",
-                2: "Slightly concerned", 
-                3: "Moderately concerned",
-                4: "Very concerned",
-                5: "Extremely concerned"
-            };
-            concernText.textContent = texts[level];
-            
-            // Show launch button
-            document.getElementById('launchButton').classList.remove('hidden');
-        }
-
-        function showIntro() {
-            document.getElementById('preTestScreen').classList.add('hidden');
-            document.getElementById('introScreen').classList.remove('hidden');
-        }
-
-        function showGameIntro() {
-            document.getElementById('introScreen').classList.add('hidden');
-            document.getElementById('gameIntroScreen').classList.remove('hidden');
-        }
-
-        function startGame() {
-            document.getElementById('gameIntroScreen').classList.add('hidden');
-            document.getElementById('gameScreen').classList.remove('hidden');
-            currentScenario = 0;
-            scores = {
-                convenience: 0,
-                selfReliant: 0, 
-                healthConscious: 0,
-                comfortFocused: 0,
-                social: 0,
-                solo: 0,
-                routine: 0,
-                spontaneous: 0
-            };
-            displayScenario();
-        }
-
-        function displayScenario() {
-            const scenario = scenarios[currentScenario];
-            const background = document.getElementById('background');
-            const timeBox = document.getElementById('timeBox');
-            const scenarioText = document.getElementById('scenarioText');
-            const choicesContainer = document.getElementById('choicesContainer');
-            const progressFill = document.getElementById('progressFill');
-
-            // Update progress
-            progressFill.style.width = `${(currentScenario / scenarios.length) * 100}%`;
-
-            // Update background
-            background.className = `background ${scenario.background}`;
-            
-            // Update time
-            timeBox.textContent = scenario.time;
-            
-            // Update scenario text
-            scenarioText.innerHTML = scenario.text;
-            
-            // Clear and create choice buttons
-            choicesContainer.innerHTML = '';
-            scenario.choices.forEach((choice, index) => {
-                const button = document.createElement('button');
-                button.className = 'choice-button';
-                button.innerHTML = `<span class="choice-letter">${choice.letter})</span>${choice.text}`;
-                button.onclick = () => makeChoice(choice.scores);
-                choicesContainer.appendChild(button);
-            });
-        }
-
-        function makeChoice(choiceScores) {
-            // Add scores
-            Object.keys(choiceScores).forEach(category => {
-                scores[category] += choiceScores[category];
-            });
-
-            // Move to next scenario or show data brokers screen
-            currentScenario++;
-            if (currentScenario < scenarios.length) {
-                setTimeout(() => {
-                    displayScenario();
-                }, 300);
-            } else {
-                setTimeout(() => {
-                    showDataBrokers();
-                }, 300);
+            if (currentScreenIndex < screens.length) {
+                document.getElementById(screens[currentScreenIndex]).classList.add('active');
             }
         }
 
-        function showDataBrokers() {
-            // Update progress to 100%
-            document.getElementById('progressFill').style.width = '100%';
-
-            // Show data brokers screen
-            document.getElementById('gameScreen').classList.add('hidden');
-            document.getElementById('dataBrokersScreen').classList.remove('hidden');
-        }
-
-        function showResults() {
-            // Calculate profile
-            const profileKey = calculateProfile();
-            const profile = profiles[profileKey];
-
-            // Show results
-            document.getElementById('dataBrokersScreen').classList.add('hidden');
-            document.getElementById('resultsScreen').classList.remove('hidden');
-            document.getElementById('profileName').textContent = profile.name;
-            document.getElementById('profileDescription').textContent = profile.description;
-        }
-
-        function calculateProfile() {
-            // Determine dominant traits
-            const convenience = scores.convenience > scores.selfReliant ? "convenience" : "selfreliant";
-            const health = scores.healthConscious > scores.comfortFocused ? "health" : "comfort";
-            const social = scores.social > scores.solo ? "social" : "solo";
-            const routine = scores.routine > scores.spontaneous ? "routine" : "spontaneous";
-
-            return `${convenience}-${health}-${social}-${routine}`;
+        function makeChoice(scenarioIndex, choiceIndex) {
+            console.log('Choice made:', scenarioIndex, choiceIndex);
+            userChoices[scenarioIndex] = choiceIndex;
+            
+            // Move to next scenario or results
+            setTimeout(function() {
+                nextScreen();
+            }, 300);
         }
 
         function restartGame() {
-            document.getElementById('resultsScreen').classList.add('hidden');
-            document.getElementById('preTestScreen').classList.remove('hidden');
-            document.getElementById('progressFill').style.width = '0%';
+            currentScreenIndex = 0;
+            userChoices = [];
             
-            // Reset pre-test
-            preTestConcern = null;
-            document.querySelectorAll('.scale-button').forEach(btn => {
-                btn.classList.remove('selected');
+            // Reset all screens
+            document.querySelectorAll('.screen').forEach(function(screen) {
+                screen.classList.remove('active');
             });
-            document.getElementById('concernText').textContent = '';
-            document.getElementById('launchButton').classList.add('hidden');
+            
+            // Show first screen
+            document.getElementById('title-screen').classList.add('active');
         }
-    </script>
-</body>
-</html>
+
+        function shareGame() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Who Do They Think You Are?',
+                    text: 'Discover what data brokers learn about you from your digital choices',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers without Web Share API
+                var url = window.location.href;
+                navigator.clipboard.writeText(url).then(function() {
+                    alert('Game link copied to clipboard!');
+                }).catch(function() {
+                    alert('Share this link: ' + url);
+                });
+            }
+        }
+
+        function learnMore() {
+            // This would link to your resources page
+            alert('This would link to your curated resources about data privacy and protection.');
+        }
+
+        const screens = [
+            'title-screen', 'intro-screen', 
+            'scenario-1', 'scenario-2', 'scenario-3', 'scenario-4', 'scenario-5',
+            'results-intro', 'profile-result', 'so-what', 'mozilla-fact', 'ireland-fact', 
+            'what-next', 'final-screen'
+        ];
+
+        // Mapping choices to psychological axes
+        const choiceProfiles = [
+            // Scenario 1: Morning
+            [
+                ['practical', 'control', 'selfassured'],      // A: Fitness app
+                ['status', 'convenience', 'reassurance'],     // B: Social media
+                ['reassurance', 'convenience'],               // C: Work emails  
+                ['status', 'control', 'reassurance']         // D: Meditation + share
+            ],
+            // Scenario 2: Headache
+            [
+                ['control', 'reassurance'],                   // A: Research symptoms
+                ['reassurance', 'control'],                   // B: Message friend
+                ['practical', 'control'],                     // C: Pharmacy
+                ['control', 'convenience', 'reassurance']     // D: GP app
+            ],
+            // Scenario 3: Shoes
+            [
+                ['control', 'reassurance'],                   // A: Research reviews
+                ['status', 'control'],                        // B: Brand store
+                ['status', 'convenience', 'reassurance'],     // C: Influencer
+                ['practical', 'convenience']                  // D: Same pair
+            ],
+            // Scenario 4: Money
+            [
+                ['control', 'practical'],                     // A: Budgeting app
+                ['control', 'selfassured'],                   // B: Message family
+                ['status', 'convenience'],                    // C: Klarna clothes
+                ['convenience', 'reassurance']                // D: Loan app
+            ],
+            // Scenario 5: Restaurant
+            [
+                ['practical', 'selfassured'],                 // A: Enjoy privately
+                ['status', 'convenience', 'reassurance'],     // B: Post with location
+                ['control', 'reassurance'],                   // C: Research chef
+                ['practical', 'convenience']                  // D: Loyalty app
+            ]
+        ];
+
+        const profiles = {
+            'status_control_reassurance': {
+                name: 'The Insecure Perfectionist',
+                axes: 'Status-Conscious + Control + Reassurance-Seeking',
+                broker: 'Obsesses over image but needs constant validation. Researches extensively but still seeks external approval for decisions.',
+                interested: 'Premium brands with social proof, luxury review platforms, status-driven subscription services',
+                impact: 'Targeted with "exclusive member" messaging, influencer testimonials, and detailed comparison content that validates expensive choices.'
+            },
+            'status_control_selfassured': {
+                name: 'The Confident Trendsetter',
+                axes: 'Status-Conscious + Control + Self-Assured',
+                broker: 'Image-conscious but makes independent decisions. Curates their lifestyle deliberately and trusts their own taste.',
+                interested: 'High-end brands, early adopter programs, lifestyle publications',
+                impact: 'Gets exclusive early access offers, premium product launches, and "insider" brand communications.'
+            },
+            'status_convenience_reassurance': {
+                name: 'The Status Seeker',
+                axes: 'Status-Conscious + Convenience + Reassurance-Seeking',
+                broker: 'Wants to look good with minimal effort. Highly influenced by trends, social proof, and what others are buying.',
+                interested: 'Fast fashion, viral product marketers, social media advertisers',
+                impact: 'Flooded with trending products, influencer partnerships, and "everyone\'s buying this" social proof campaigns.'
+            },
+            'status_convenience_selfassured': {
+                name: 'The Effortless Cool',
+                axes: 'Status-Conscious + Convenience + Self-Assured',
+                broker: 'Cares about image but trusts their instincts. Buys stylish things easily without overthinking.',
+                interested: 'Luxury convenience brands, subscription lifestyle services, premium delivery apps',
+                impact: 'Targeted with effortless luxury messaging, curated selections, and "made for people like you" campaigns.'
+            },
+            'practical_control_reassurance': {
+                name: 'The Anxious Optimizer',
+                axes: 'Practical + Control + Reassurance-Seeking',
+                broker: 'Wants the best value but needs validation through reviews and research. Overthinks practical purchases.',
+                interested: 'Comparison sites, review platforms, consumer guides, insurance companies',
+                impact: 'Overwhelmed with detailed comparisons, "expert recommended" products, and analysis paralysis-inducing choice architectures.'
+            },
+            'practical_control_selfassured': {
+                name: 'The Self-Reliant Planner',
+                axes: 'Practical + Control + Self-Assured',
+                broker: 'Makes thoughtful, independent decisions focused on utility. Hardest to influence and track.',
+                interested: 'Tool manufacturers, professional services, privacy-focused brands',
+                impact: 'Charged premium for privacy-respecting services. Excluded from mainstream marketing but valuable for quality-focused brands.'
+            },
+            'practical_convenience_reassurance': {
+                name: 'The Convenience Validator',
+                axes: 'Practical + Convenience + Reassurance-Seeking',
+                broker: 'Wants efficient solutions but needs social proof to feel confident. Susceptible to "most popular" messaging.',
+                interested: 'Amazon-style platforms, rating-driven services, "most trusted" brands',
+                impact: 'Shown products with high ratings, "bestseller" tags, and popularity-based recommendations that exploit need for validation.'
+            },
+            'practical_convenience_selfassured': {
+                name: 'The Efficient Minimalist',
+                axes: 'Practical + Convenience + Self-Assured',
+                broker: 'Values simplicity and efficiency. Makes quick, practical decisions without needing external validation.',
+                interested: 'Utility-focused brands, subscription services, automation tools',
+                impact: 'Targeted with "set it and forget it" services, bulk buying options, and time-saving solutions that prioritize function over form.'
+            }
+        };
+
+        function selectRating(rating, type) {
+            // Clear previous selections
+            const buttons = document.querySelectorAll(`#${type === 'pre' ? 'pre-question' : 'post-question'} .rating-btn`);
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            
+            // Mark selected
+            event.target.classList.add('selected');
+            
+            if (type === 'pre') {
+                preRating = rating;
+                document.getElementById('pre-next').disabled = false;
+            } else {
+                postRating = rating;
+                document.getElementById('post-next').disabled = false;
+            }
+        }
+
+        function nextScreen() {
+            // Special handling for title screen - auto advance after delay
+            if (screens[currentScreenIndex] === 'title-screen') {
+                setTimeout(() => {
+                    document.getElementById(screens[currentScreenIndex]).classList.remove('active');
+                    currentScreenIndex++;
+                    document.getElementById(screens[currentScreenIndex]).classList.add('active');
+                }, 1500);
+                return;
+            }
+
+            document.getElementById(screens[currentScreenIndex]).classList.remove('active');
+            currentScreenIndex++;
+            
+            if (currentScreenIndex < screens.length) {
+                document.getElementById(screens[currentScreenIndex]).classList.add('active');
+            }
+        }
+
+        function makeChoice(scenarioIndex, choiceIndex) {
+            userChoices[scenarioIndex] = choiceIndex;
+            
+            // Move to next scenario or results
+            setTimeout(() => {
+                nextScreen();
+            }, 300);
+        }
+
+        function calculateProfile() {
+            const traitCounts = {
+                status: 0, practical: 0,
+                control: 0, convenience: 0,
+                reassurance: 0, selfassured: 0
+            
